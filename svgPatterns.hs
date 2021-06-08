@@ -12,8 +12,8 @@ type Circle    = (Point,Float)
 -- Paleta (R, G, B) só com tons de verde "hard-coded" 
 -- (pode ser melhorado substituindo os valores literais por parâmetros)
 -- Além disso, o que acontecerá se n for muito grande ou negativo?
-greenPalette :: Int -> [(Int,Int,Int)]
-greenPalette n = [(0, 80+i*10, 0) | i <- [0..n] ]
+redPalette :: Int -> [(Int,Int,Int)]
+redPalette n = [(80+i*10, 0, 0) | i <- [0..n] ]
 
 -- Paleta com n valores retirados de uma lista com sequências de R, G e B 
 -- O '$' é uma facilidade sintática que substitui parênteses
@@ -28,10 +28,9 @@ rgbPalette n = take n $ cycle [(255,0,0),(0,255,0),(0,0,255)]
 -------------------------------------------------------------------------------
 
 genRectsInLine :: Int -> [Rect]
-genRectsInLine n  = [((m*(w+gap), 0.0), w, h) | m <- [0..fromIntegral (n-1)]]
-  where (w,h) = (50,50)
-        gap = 10
-
+genRectsInLine n  = [((m*(w+gap), 0.0), w, h) | m <- [0..fromIntegral (n-1)]] ++ [((0,300),1200,400)]
+  where (w,h) = (300,1200)
+        gap = 0
 
 -------------------------------------------------------------------------------
 -- Strings SVG
@@ -67,13 +66,13 @@ svgElements func elements styles = concat $ zipWith func elements styles
 
 main :: IO ()
 main = do
-  writeFile "rects.svg" $ svgstrs
+  writeFile "figs.svg" $ svgstrs
   where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
         svgfigs = svgElements svgRect rects (map svgStyle palette)
         rects = genRectsInLine nrects
-        palette = rgbPalette nrects
-        nrects = 10
-        (w,h) = (1500,500) -- width,height da imagem SVG
+        palette = redPalette nrects
+        nrects = 5
+        (w,h) = (1200,1000) -- width,height da imagem SVG
 
 
 
